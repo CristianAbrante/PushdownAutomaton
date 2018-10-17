@@ -19,7 +19,7 @@ package symbol;
  * @date 		15/10/2018
  * @version 1.0.0
  */
-public class Symbol {
+public class Symbol implements Comparable<Symbol> {
   
   /**
    * it stores the character string of
@@ -71,7 +71,17 @@ public class Symbol {
     result = prime * result + ((value == null) ? 0 : value.hashCode());
     return result;
   }
-
+  
+  /**
+   * Method used to compare two symbols.
+   * 
+   * @see java.lang.Comparable#compareTo(java.lang.Object)
+   */
+  @Override
+  public int compareTo(Symbol o) {
+    return toString().compareTo(o.toString());
+  }
+  
   /**
    * Method used to test the equality
    * of two symbols.
