@@ -10,9 +10,9 @@ import java.util.Objects;
  * point where the computational
  * model is processing.
  *
- * Computational models who
+ * Computational models which
  * uses states could be DFA,
- * NFA, PDA or Turing Machines.
+ * NFA, PDA or Turing Machine.
  *
  * @author Cristian Abrante
  * @version 1.0.0
