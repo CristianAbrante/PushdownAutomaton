@@ -24,9 +24,7 @@ import symbol.Symbol;
  * computation systems such as DFA,
  * NFA, PDA or Turing machine
  * 
- * @author	Cristian Abrante Dorta
- * @company	University Of La Laguna
- * @date 		17/10/2018
+ * @author	Cristian Abrante
  * @version 1.0.0
  */
 public class Alphabet {

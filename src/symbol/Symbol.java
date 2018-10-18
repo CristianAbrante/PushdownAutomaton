@@ -14,9 +14,7 @@ package symbol;
  * represented into the input tape or
  * stack of our automata.
  * 
- * @author	Cristian Abrante Dorta
- * @company	University Of La Laguna
- * @date 		15/10/2018
+ * @author	Cristian Abrante
  * @version 1.0.0
  */
 public class Symbol implements Comparable<Symbol> {
