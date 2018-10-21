@@ -29,6 +29,99 @@ public abstract class AbstractReader {
   public final String COMMENT_DELIMITER = "#";
 
   /**
+   * Variable used to store the splitted
+   * definition of the machine.
+   */
+  private ArrayList<String> splittedDefinition;
+
+  /**
+   * Index that determines which line
+   * of the definition we are examining.
+   */
+  private int currentDefinitionIndex = 0;
+
+  /**
+   * Constructor of the abstract reader.
+   *
+   * It takes a string which contains a
+   * definition of the machine.
+   *
+   * @param definition of the machine.
+   */
+  public AbstractReader(String definition) {
+    setDefinition(definition);
+  }
+
+  /**
+   * returns the definition of the
+   * machine without spaces and
+   * comments.
+   *
+   * @return definition of the machine.
+   */
+  public String getDefinition() {
+    String definition = "";
+    for (String definitionLine : splittedDefinition) {
+      definition += definitionLine + "\n";
+    }
+    return definition;
+  }
+
+  /**
+   * Sets the definition of the string.
+   *
+   * @param definition of the machine.
+   */
+  public void setDefinition(String definition) {
+    if (definition == null)
+      throw new NullPointerException("definition can not be null.");
+
+    splittedDefinition = new ArrayList<String>();
+    String[] definitionLines = definition.split("\\r?\\n");
+    for (String line : definitionLines) {
+      String cleanedLine = deleteComments(line);
+      if (!cleanedLine.isEmpty()) {
+        splittedDefinition.add(cleanedLine);
+      }
+    }
+  }
+
+  /**
+   * Sets the examining line of the
+   * definition to the first line.
+   */
+  public void resetLinePosition() {
+    currentDefinitionIndex = 0;
+  }
+
+  /**
+   * Returns the next line of
+   * the definition.
+   *
+   * @return next of the definition
+   *         or {@code null} if there are
+   *         no more lines.
+   */
+  public String getNextLine() {
+    if (hasMoreLines()) {
+      return splittedDefinition.get(currentDefinitionIndex++);
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Tests if there are more lines in the
+   * definition.
+   *
+   * @return {@code true} if there are more
+   *          lines in the definition.
+   */
+  public boolean hasMoreLines() {
+    return currentDefinitionIndex < splittedDefinition.size();
+  }
+
+  /**
    * Read a list of symbols from the
    * specified string. The format of
    * the symbols in the string is
@@ -40,8 +133,7 @@ public abstract class AbstractReader {
    * @return a list of symbols.
    */
   public List<Symbol> readSymbols(String symbolsString) {
-    String noCommentsStr = deleteComments(symbolsString);
-    List<String> tokenizedString = tokenizeString(noCommentsStr);
+    List<String> tokenizedString = tokenizeString(symbolsString);
     List<Symbol> symbols = new ArrayList<>();
     for (String token : tokenizedString) {
       symbols.add(new Symbol(token));
@@ -61,7 +153,6 @@ public abstract class AbstractReader {
    * @return a list with the states.
    */
   public List<State> readStates(String statesString) {
-    String noCommentsStr = deleteComments(statesString);
     List<String> tokenizedString = tokenizeString(statesString);
     List<State> states = new ArrayList<>();
     for (String token : tokenizedString) {
@@ -88,14 +179,14 @@ public abstract class AbstractReader {
    * Deletes the line comments
    * from the specified string,
    * and returns the non-comment
-   * string.
+   * string trimmed.
    *
    * @param commentsString commented string.
    * @return uncomented part of the string.
    */
-  protected String deleteComments(String commentsString) {
+  private String deleteComments(String commentsString) {
     List<String> splittedList = Arrays.asList(commentsString.split(COMMENT_DELIMITER));
-    return splittedList.get(0);
+    return splittedList.get(0).trim();
   }
 
   /**
@@ -107,7 +198,7 @@ public abstract class AbstractReader {
    * @param strToTokenize string that we want to tokenize.
    * @return tokens of the string.
    */
-  protected List<String> tokenizeString(String strToTokenize) {
+  private List<String> tokenizeString(String strToTokenize) {
     List<String> splittedList = Arrays.asList(strToTokenize.split("\\s+"));
     List<String> returnList = new ArrayList<String>();
     for (String token : splittedList) {
