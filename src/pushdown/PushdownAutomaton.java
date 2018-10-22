@@ -1,6 +1,7 @@
 package pushdown;
 
 import alphabet.Alphabet;
+import pushdown.stack.PDAStack;
 import pushdown.transition.PDATransitionFunction;
 import state.SetOfStates;
 import state.State;
@@ -21,6 +22,7 @@ public class PushdownAutomaton {
   private Symbol initialStackSymbol;
   private SetOfStates acceptingStates;
   private PDATransitionFunction transitionFunction;
+  private PDAStack stack;
 
   public PushdownAutomaton(SetOfStates setOfStates,
                            Alphabet inputAlphabet,
@@ -36,6 +38,7 @@ public class PushdownAutomaton {
     this.initialStackSymbol = initialStackSymbol;
     this.acceptingStates = acceptingStates;
     this.transitionFunction = transitionFunction;
+    this.stack = new PDAStack();
   }
 
   @Override
