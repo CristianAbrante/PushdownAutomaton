@@ -4,9 +4,11 @@ import state.State;
 import symbol.Symbol;
 import transition.Transition;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * <h2>Abstract Reader</h2>
@@ -26,7 +28,7 @@ public abstract class AbstractReader {
    * This symbol is used to delimit
    * comments into the specified string.
    */
-  public final String COMMENT_DELIMITER = "#";
+  public final static String COMMENT_DELIMITER = "#";
 
   /**
    * Variable used to store the splitted
@@ -39,6 +41,22 @@ public abstract class AbstractReader {
    * of the definition we are examining.
    */
   private int currentDefinitionIndex = 0;
+
+  /**
+   * Constructor of the abstract reader.
+   *
+   * It takes an input reader file as
+   * a parameter.
+   *
+   * @param file that we want to read from.
+   */
+  public AbstractReader(FileReader file) {
+    if (file == null)
+      throw new NullPointerException("file can not be null.");
+
+    String definition = (new Scanner(file)).useDelimiter("\\Z").next();
+    setDefinition(definition);
+  }
 
   /**
    * Constructor of the abstract reader.
@@ -90,7 +108,7 @@ public abstract class AbstractReader {
    * Sets the examining line of the
    * definition to the first line.
    */
-  public void resetLinePosition() {
+  protected void resetLinePosition() {
     currentDefinitionIndex = 0;
   }
 
@@ -102,7 +120,7 @@ public abstract class AbstractReader {
    *         or {@code null} if there are
    *         no more lines.
    */
-  public String getNextLine() {
+  protected String getNextLine() {
     if (hasMoreLines()) {
       return splittedDefinition.get(currentDefinitionIndex++);
     } else {
@@ -117,7 +135,7 @@ public abstract class AbstractReader {
    * @return {@code true} if there are more
    *          lines in the definition.
    */
-  public boolean hasMoreLines() {
+  protected boolean hasMoreLines() {
     return currentDefinitionIndex < splittedDefinition.size();
   }
 
@@ -132,7 +150,7 @@ public abstract class AbstractReader {
    * @param symbolsString the string contained the identifiers.
    * @return a list of symbols.
    */
-  public List<Symbol> readSymbols(String symbolsString) {
+  protected List<Symbol> readSymbols(String symbolsString) {
     List<String> tokenizedString = tokenizeString(symbolsString);
     List<Symbol> symbols = new ArrayList<>();
     for (String token : tokenizedString) {
@@ -152,7 +170,7 @@ public abstract class AbstractReader {
    * @param statesString string containing the states id.
    * @return a list with the states.
    */
-  public List<State> readStates(String statesString) {
+  protected List<State> readStates(String statesString) {
     List<String> tokenizedString = tokenizeString(statesString);
     List<State> states = new ArrayList<>();
     for (String token : tokenizedString) {
@@ -173,7 +191,26 @@ public abstract class AbstractReader {
    * @param transitionString definition of the transition.
    * @return transition object.
    */
-  public abstract Transition readTransition(String transitionString);
+  protected abstract Transition readTransition(String transitionString);
+
+  /**
+   * Return the string as a list
+   * of tokens. We consider the
+   * tokens splitted by spaces
+   * or other space delimitations.
+   *
+   * @param strToTokenize string that we want to tokenize.
+   * @return tokens of the string.
+   */
+  protected List<String> tokenizeString(String strToTokenize) {
+    List<String> splittedList = Arrays.asList(strToTokenize.split("\\s+"));
+    List<String> returnList = new ArrayList<String>();
+    for (String token : splittedList) {
+      if (!token.isEmpty())
+        returnList.add(token);
+    }
+    return returnList;
+  }
 
   /**
    * Deletes the line comments
@@ -187,24 +224,5 @@ public abstract class AbstractReader {
   private String deleteComments(String commentsString) {
     List<String> splittedList = Arrays.asList(commentsString.split(COMMENT_DELIMITER));
     return splittedList.get(0).trim();
-  }
-
-  /**
-   * Return the string as a list
-   * of tokens. We consider the
-   * tokens splitted by spaces
-   * or other space delimitations.
-   *
-   * @param strToTokenize string that we want to tokenize.
-   * @return tokens of the string.
-   */
-  private List<String> tokenizeString(String strToTokenize) {
-    List<String> splittedList = Arrays.asList(strToTokenize.split("\\s+"));
-    List<String> returnList = new ArrayList<String>();
-    for (String token : splittedList) {
-      if (!token.isEmpty())
-        returnList.add(token);
-    }
-    return returnList;
   }
 }
