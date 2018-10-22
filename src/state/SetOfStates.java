@@ -1,7 +1,6 @@
 package state;
 
-import java.util.Collection;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * <h2>SetOfStates</h2>
@@ -34,6 +33,21 @@ public class SetOfStates extends TreeSet<State> {
    * Constructor of the
    * class.
    *
+   * It creates the set from
+   * the given state.
+   *
+   * @param state which we want to create
+   *              the set from.
+   */
+  public SetOfStates(State state) {
+    this();
+    add(state);
+  }
+
+  /**
+   * Constructor of the
+   * class.
+   *
    * It creates the set of
    * states from the given
    * collection.
@@ -44,21 +58,56 @@ public class SetOfStates extends TreeSet<State> {
    *
    */
   public SetOfStates(Collection<State> states) {
-    super(states);
+    this();
+    addAll(states);
   }
 
   /**
-   * Constructor of the
-   * class.
+   * Returns the given state represented
+   * by the identifier.
    *
-   * It creates the set from
-   * the given state.
-   *
-   * @param state which we want to create
-   *              the set from.
+   * @param identifier
+   * @return
    */
-  public SetOfStates(State state) {
-    super();
-    add(state);
+  public State getStateById(String identifier) {
+    for (State state : this) {
+      if (state.toString().equals(identifier)) {
+        return state;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Tests if the set contains the
+   * state by identifier of the state.
+   *
+   * @param identifier of the state.
+   * @return {@code true} if the set contains
+   *         the state.
+   */
+  public boolean containsById(String identifier) {
+    return super.contains(new State(identifier));
+  }
+
+  /**
+   * Test if the set contains all the
+   * states of the collection by their
+   * idl.
+   *
+   * @param identifiers of the states.
+   * @return {@code true} if the set contains
+   *         all the states.
+   */
+  public boolean containsAllById(Collection<String> identifiers) {
+    if (identifiers == null)
+      throw new NullPointerException("states can not be null.");
+
+    for (String state : identifiers) {
+      if (!super.contains(new State(state))) {
+        return false;
+      }
+    }
+    return true;
   }
 }

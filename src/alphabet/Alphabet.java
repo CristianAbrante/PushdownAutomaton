@@ -117,7 +117,7 @@ public class Alphabet {
     testIfNull(symbol);
     return getSymbols().remove(symbol);
   }
-  
+
   /**
    * Test if alphabet contains the
    * specified symbol.
@@ -134,7 +134,71 @@ public class Alphabet {
     testIfNull(symbol);
     return getSymbols().contains(symbol);
   }
-  
+
+  /**
+   * Tests if contains all the symbols
+   * of the collection.
+   *
+   * @param symbols to be tested.
+   * @return {@code true} if all elements
+   *          belong to the alphabet.
+   */
+  public boolean containsAll(Collection<Symbol> symbols) {
+    return getSymbols().containsAll(symbols);
+  }
+
+  /**
+   * Tests if set contains the symbol by
+   * value.
+   *
+   * @param value of the symbol.
+   * @return {@code true} if all elements
+   *         belong to the alphabet.
+   */
+  public boolean containsByValue(String value) {
+    return getSymbols().contains(new Symbol(value));
+  }
+
+  /**
+   * Tests if contains all the elements
+   * by value.
+   *
+   * @param values that we want to test.
+   * @return {@code true} if all elements
+   *         belong to the alphabet.
+   */
+  public boolean containsAllByValue(Collection<String> values) {
+    if (values == null)
+      throw new NullPointerException("values can not be null.");
+
+    for (String value : values) {
+      if (!containsByValue(value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns the symbol given the
+   * value.
+   *
+   * @param value of the symbol
+   * @return symbol if it belongs to the alphabet
+   *         and {@code null} otherwise.
+   */
+  public Symbol getSymbol(String value) {
+    if (value == null)
+      throw new NullPointerException("identifier can not be null.");
+
+    for (Symbol symbol : getSymbols()) {
+      if (symbol.toString().equals(value)) {
+        return symbol;
+      }
+    }
+    return null;
+  }
+
   /**
    * Returns the alphabet in a string
    * representation like this:
@@ -182,7 +246,8 @@ public class Alphabet {
       return false;
     return true;
   }
-  
+
+
   /**
    * getter for alphabet symbols.
    * 
