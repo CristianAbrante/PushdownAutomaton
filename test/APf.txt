@@ -1,0 +1,14 @@
+# Autómata de Pila con estados finales para reconocer el lenguaje 
+#  L = {a^nb^n | n > 0}
+# Represento el epsilon con un .
+q1 q2 q3
+a b
+S A
+q1
+S
+q3
+q1 a S q1 A S
+q1 a A q1 A A
+q1 b A q2 .
+q2 b A q2 .
+q2 . S q3 S
