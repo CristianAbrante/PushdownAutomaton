@@ -191,6 +191,9 @@ public class Alphabet {
     if (value == null)
       throw new NullPointerException("identifier can not be null.");
 
+    if (value.equals(Symbol.EMPTY_SYMBOL.toString()))
+      return Symbol.EMPTY_SYMBOL;
+
     for (Symbol symbol : getSymbols()) {
       if (symbol.toString().equals(value)) {
         return symbol;

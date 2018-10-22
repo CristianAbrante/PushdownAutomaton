@@ -110,4 +110,16 @@ public class SetOfStates extends TreeSet<State> {
     }
     return true;
   }
+
+  @Override
+  public String toString() {
+    String setOfStates = "{";
+    int index = 0;
+    for (State state : this) {
+      setOfStates += index < size() - 1 ? state + ", " : state;
+      index += 1;
+    }
+    setOfStates += "}";
+    return setOfStates;
+  }
 }

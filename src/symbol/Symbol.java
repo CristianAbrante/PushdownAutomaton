@@ -111,7 +111,7 @@ public class Symbol implements Comparable<Symbol> {
    */
   @Override
   public String toString() {
-    return value;
+    return value.equals(EMPTY_SYMBOL_VALUE) ? "ε" : value;
   }
 
   /**
