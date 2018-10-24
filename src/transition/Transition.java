@@ -20,7 +20,7 @@ import java.util.Objects;
  * @author Cristian Abrante
  * @version 1.0.0
  */
-public class Transition {
+public class Transition implements Comparable<Transition> {
   /**
    * Tuple of parameters of
    * the transition.
@@ -154,5 +154,21 @@ public class Transition {
     }
     transition += ")";
     return transition;
+  }
+
+  @Override
+  public int compareTo(Transition o) {
+    int currentStateComp = getCurrentState().compareTo(o.getCurrentState());
+    int nextStateComp = getNextState().compareTo(o.getNextState());
+
+    if (currentStateComp == 0
+            && nextStateComp == 0) {
+      return 0;
+    }
+    if (currentStateComp != 0) {
+      return currentStateComp;
+    } else {
+      return nextStateComp;
+    }
   }
 }

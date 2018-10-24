@@ -77,9 +77,39 @@ public class PDATransitionFunction extends TransitionFunction {
    * @param stackSymbol
    * @return
    */
-  public TreeSet<Tuple> getNextState(State currentState,
-                                     Symbol tapeSymbol,
-                                     Symbol stackSymbol) {
-    return super.getNextState(new Triplet<>(currentState, tapeSymbol, stackSymbol));
+  public TreeSet<PDATransition> getNextState(State currentState,
+                                          Symbol tapeSymbol,
+                                          Symbol stackSymbol) {
+    Triplet<State, Symbol, Symbol> currentStateTriplet =
+            new Triplet<>(currentState, tapeSymbol, stackSymbol);
+
+    TreeSet<Transition> symbolTransitions =
+            super.getNextState(currentStateTriplet);
+
+    // sets the tuple to collect empty symbol values.
+    currentStateTriplet = currentStateTriplet.setAt1(Symbol.EMPTY_SYMBOL);
+    TreeSet<Transition> emptySymbolTransitions =
+            super.getNextState(currentStateTriplet);
+
+    TreeSet<Transition> unionTransitions;
+    if (symbolTransitions == null) {
+      unionTransitions = emptySymbolTransitions;
+    } else {
+      if (emptySymbolTransitions == null) {
+        unionTransitions = symbolTransitions;
+      } else {
+        symbolTransitions.addAll(emptySymbolTransitions);
+        unionTransitions = symbolTransitions;
+      }
+    }
+    if (unionTransitions == null) {
+      return null;
+    }
+
+    TreeSet<PDATransition> pdaTransitions = new TreeSet<>();
+    for (Transition t : unionTransitions) {
+      pdaTransitions.add(new PDATransition(t));
+    }
+    return pdaTransitions;
   }
 }

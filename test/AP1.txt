@@ -1,0 +1,14 @@
+
+p q r
+a b
+S A
+
+p
+S
+
+r
+
+p a S p A
+p a A p A A
+p b A q .
+q b A q .

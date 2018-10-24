@@ -1,0 +1,19 @@
+# Cristian Abrante Dorta
+
+# Automaton used to recognize
+# the languaje of as mutch a's than b's
+
+p q s
+a  b
+S A
+
+p
+S
+
+s
+
+p a S p A S
+p a A p A A
+p b A q .
+q b A q .
+q . S s S

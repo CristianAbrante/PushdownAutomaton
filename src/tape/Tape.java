@@ -3,6 +3,7 @@ package tape;
 import alphabet.Alphabet;
 import symbol.Symbol;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,18 @@ public class Tape {
   private List<Symbol> symbols;
   private int currentPosition;
 
+  public Tape(Tape that) {
+    List<Symbol> clonedSymbols = new ArrayList<>();
+    for (Symbol symbol : that.getSymbols()) {
+      clonedSymbols.add(symbol);
+    }
+    this.setAlphabet(that.getAlphabet());
+    this.setSymbols(clonedSymbols);
+    this.setCurrentPosition(that.getCurrentPosition());
+  }
+
   public Tape(List<Symbol> symbols, Alphabet alphabet) {
+    this.alphabet = alphabet;
     setSymbols(symbols);
   }
 
@@ -50,6 +62,30 @@ public class Tape {
     move(Movement.RIGHT);
   }
 
+  public boolean isReseted() {
+    return currentPosition == 0;
+  }
+
+  public Alphabet getAlphabet() {
+    return alphabet;
+  }
+
+  public void setAlphabet(Alphabet alphabet) {
+    this.alphabet = alphabet;
+  }
+
+  public int getCurrentPosition() {
+    return currentPosition;
+  }
+
+  public void setCurrentPosition(int currentPosition) {
+    this.currentPosition = currentPosition;
+  }
+
+  public boolean hasReachedTheEnd() {
+    return getCurrentPosition() >= getSymbols().size();
+  }
+
   private List<Symbol> getSymbols() {
     return symbols;
   }
@@ -59,9 +95,18 @@ public class Tape {
       throw new NullPointerException("symbols can not be null.");
 
     for (Symbol symbol : symbols)
-      if (symbol == null || !alphabet.contains(symbol))
+      if (symbol == null || !alphabet.containsByValue(symbol.toString()))
         throw new NullPointerException("A symbol is null");
 
     this.symbols = symbols;
+  }
+
+  @Override
+  public String toString() {
+    String tape = "";
+    for (int i = getCurrentPosition(); i < getSymbols().size(); i++) {
+      tape += getSymbols().get(i) + " ";
+    }
+    return tape;
   }
 }

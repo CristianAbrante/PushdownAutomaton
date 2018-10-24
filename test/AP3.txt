@@ -1,0 +1,17 @@
+
+
+p q s
+a b
+S A
+
+p  # This is the initial
+S
+
+s
+
+p a S p A S
+p a A p A A
+p b A q .
+p . S s S
+q b A q .
+q . S s S

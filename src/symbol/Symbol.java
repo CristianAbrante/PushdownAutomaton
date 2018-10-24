@@ -35,7 +35,7 @@ public class Symbol implements Comparable<Symbol> {
    * This is the characters sequence that represents
    * the empty symbol.
    */
-  private static final String EMPTY_SYMBOL_VALUE = ".";
+  public static final String EMPTY_SYMBOL_VALUE = ".";
   
   /**
    * The empty symbol is an special kind of symbol used

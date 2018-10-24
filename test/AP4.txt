@@ -1,0 +1,10 @@
+q0 q1
+a b
+S B
+q0
+S
+q1
+q0 . S q0 .
+q0 a S q0 S B
+q0 a S q0 B
+q0 b B q0 .

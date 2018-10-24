@@ -71,7 +71,7 @@ public class TransitionFunction {
 
     Tuple currentState = transition.getCurrentState();
     TreeSet<Tuple> nextState = hasNextState(currentState) ?
-      getNextState(currentState) :
+      getNextStateTuples(currentState) :
       new TreeSet<Tuple>();
     nextState.add(transition.getNextState());
     getFunctionMap().put(currentState, nextState);
@@ -112,11 +112,19 @@ public class TransitionFunction {
    * @return next state of the function or {@code null}
    * if there is not next state.
    */
-  public TreeSet<Tuple> getNextState(Tuple currentState) {
+  public TreeSet<Transition> getNextState(Tuple currentState) {
     if (currentState == null)
       throw new NullPointerException("current state can not be null.");
 
-    return getFunctionMap().get(currentState);
+    TreeSet<Tuple> nextStates = getFunctionMap().get(currentState);
+    if (nextStates == null)
+      return null;
+
+    TreeSet<Transition> nextStateTransitions = new TreeSet<>();
+    for (Tuple nextState : nextStates)
+      nextStateTransitions.add(new Transition(currentState, nextState));
+
+    return nextStateTransitions;
   }
 
   /**
@@ -170,5 +178,12 @@ public class TransitionFunction {
    */
   private HashMap<Tuple, TreeSet<Tuple>> getFunctionMap() {
     return functionMap;
+  }
+
+  private TreeSet<Tuple> getNextStateTuples(Tuple currentState) {
+    if (currentState == null)
+      throw new NullPointerException("current state can not be null.");
+
+    return getFunctionMap().get(currentState);
   }
 }

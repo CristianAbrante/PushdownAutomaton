@@ -23,6 +23,10 @@ public class State implements Comparable<State> {
    */
   private String identifier;
 
+  public State(State that) {
+    this(that.toString());
+  }
+
   /**
    * Constructor of state.
    *

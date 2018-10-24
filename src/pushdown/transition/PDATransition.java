@@ -55,6 +55,10 @@ public class PDATransition extends Transition {
             new Pair<>(nextState, nextStackSymbols));
   }
 
+  public PDATransition(Transition t) {
+    super(t.getCurrentState(), t.getNextState());
+  }
+
   /**
    * Sets the current state of
    * the transition.
@@ -79,5 +83,25 @@ public class PDATransition extends Transition {
   public void setNextState(State nextState,
                            SymbolList nextStackSymbols) {
     super.setNextState(new Pair<>(nextState, nextStackSymbols));
+  }
+
+  public State getCurrentStateNode() {
+    return (State) getCurrentState().getValue(0);
+  }
+
+  public Symbol getCurrentStateSymbol() {
+    return (Symbol) getCurrentState().getValue(1);
+  }
+
+  public Symbol getCurrentStateStackSymbol() {
+    return (Symbol) getCurrentState().getValue(2);
+  }
+
+  public State getNextStateNode() {
+    return (State) getNextState().getValue(0);
+  }
+
+  public SymbolList getNextStateStackSymbols() {
+    return (SymbolList) getNextState().getValue(1);
   }
 }
