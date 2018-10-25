@@ -27,27 +27,6 @@ public class PushdownAutomatonTest {
   PushdownAutomaton pda;
   Tape tape;
 
-  /*
-  @Before
-  public void SetUp() throws FileNotFoundException {
-    reader = new PDAReader(new FileReader("test/AP1p.txt"));
-    tapeReader = new TapeReader(new FileReader("test/AP1Tape1.txt"));
-  }
-  /*
-  @Test
-  public void creationTest() {
-    pda = reader.getReadedPDA();
-    tape1 = new Tape(tapeReader.getTokenizedInput(), pda.getInputAlphabet());
-  }
-
-  @Test
-  public void evaluationTest() {
-    pda = reader.getReadedPDA();
-    tape1 = new Tape(tapeReader.getTokenizedInput(), pda.getInputAlphabet());
-
-    pda.evaluate(tape1);
-  }*/
-
   @Test
   public void Automaton1Test() throws FileNotFoundException {
     String fileName = "test/AP1.txt";

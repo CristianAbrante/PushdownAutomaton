@@ -177,7 +177,8 @@ public class PushdownAutomaton {
     if (evaluateIfCurrentStateIsAcceptance())
       return true;
     if (currentEvaluationStack.isEmpty()) {
-      printCurrentState(null);
+      if (isPrintable)
+        printCurrentState(null);
       return false;
     }
 
