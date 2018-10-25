@@ -11,6 +11,7 @@ import symbol.Symbol;
 import tape.Tape;
 import transition.Transition;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
@@ -65,6 +66,9 @@ public class PushdownAutomaton {
   private PDAStack currentEvaluationStack;
   private EvaluationStack evaluationStack;
 
+  public boolean isPrintable;
+  private int tapeSize;
+
   public PushdownAutomaton(SetOfStates setOfStates,
                            Alphabet inputAlphabet,
                            Alphabet stackAlphabet,
@@ -115,7 +119,7 @@ public class PushdownAutomaton {
 
     if (!inputTape.isReseted())
       throw new IllegalArgumentException("tape must be reset");
-
+    tapeSize = inputTape.size();
     currentEvaluationState = initialState;
     currentEvaluationTape = inputTape;
     currentEvaluationStack = new PDAStack();
@@ -127,13 +131,18 @@ public class PushdownAutomaton {
             transitionFunction.getNextState(currentEvaluationState,
                     currentEvaluationTape.read(),
                     currentEvaluationStack.peek());
-    printCurrentState(nextTransitions);
+    if (isPrintable) {
+      printHeader();
+      printCurrentState(nextTransitions);
+    }
     if (nextTransitions != null) {
       evaluationStack.push(currentEvaluationState,
                            currentEvaluationTape,
                            currentEvaluationStack);
       for (PDATransition t : nextTransitions) {
         if (evaluateTransition(t)) {
+          if (isPrintable)
+            printCurrentState(null);
           return true;
         } else {
           restoreActualState();
@@ -176,7 +185,8 @@ public class PushdownAutomaton {
             transitionFunction.getNextState(currentEvaluationState,
                                             currentEvaluationTape.read(),
                                             currentEvaluationStack.peek());
-    printCurrentState(nextTransitions);
+    if (isPrintable)
+      printCurrentState(nextTransitions);
     if (nextTransitions != null) {
       evaluationStack.push(currentEvaluationState,
                            currentEvaluationTape,
@@ -209,20 +219,38 @@ public class PushdownAutomaton {
     return false;
   }
 
-  private void printCurrentState(TreeSet<PDATransition> transitions) {
-    String currentState = "";
+  private String getFormat() {
+    return "| %-5s | %-" + (tapeSize * 2 + 1) + "s | %-15s | ";
+  }
 
-    currentState += currentEvaluationState + "  " +
-            currentEvaluationTape.toString() + "  " +
-            currentEvaluationStack.toString() + "  ";
+  private void printCurrentState(TreeSet<PDATransition> transitions) {
+    String printFormat = getFormat();
+    String currentState = String.format(printFormat, currentEvaluationState,
+            currentEvaluationTape.toString(),
+            currentEvaluationStack.toString());
+
     if (transitions != null) {
+      int index = 0;
       for (PDATransition t : transitions) {
-        currentState += t + " | ";
+        currentState += t + "  ";
+        //currentState += index < transitions.size() - 1 ? " "
       }
     } else {
-      currentState += "w ne L";
+      currentState += evaluateIfCurrentStateIsAcceptance() ?
+              "ω ∈ L" : "ω ∉ L";
     }
 
     System.out.println(currentState);
+  }
+
+  private void printHeader() {
+    String format = getFormat();
+    int n = 44 + tapeSize * 2;
+
+    String header = String.join("", Collections.nCopies(n, "-")) + "\n";
+    header += String.format(getFormat(), "state", "word (ω)", "stack");
+    header += "transitions\n";
+    header += String.join("", Collections.nCopies(n, "-"));
+    System.out.println(header);
   }
 }

@@ -54,6 +54,7 @@ public class PushdownAutomatonTest {
     reader = new PDAReader(new FileReader(fileName));
 
     pda = reader.getReadedPDA();
+    pda.isPrintable = true;
 
     String tape1 = "a a b b";
     tapeReader = new TapeReader(tape1);
@@ -76,6 +77,7 @@ public class PushdownAutomatonTest {
     reader = new PDAReader(new FileReader(fileName));
 
     pda = reader.getReadedPDA();
+    pda.isPrintable = true;
 
     String tape1 = "a a b b";
     tapeReader = new TapeReader(tape1);
@@ -98,6 +100,7 @@ public class PushdownAutomatonTest {
     reader = new PDAReader(new FileReader(fileName));
 
     pda = reader.getReadedPDA();
+    pda.isPrintable = true;
 
     String tape1 = "a a b b";
     tapeReader = new TapeReader(tape1);
@@ -120,6 +123,7 @@ public class PushdownAutomatonTest {
     reader = new PDAReader(new FileReader(fileName));
 
     pda = reader.getReadedPDA();
+    pda.isPrintable = true;
 
     String tape1 = "a a b b";
     tapeReader = new TapeReader(tape1);
@@ -142,6 +146,7 @@ public class PushdownAutomatonTest {
     reader = new PDAReader(new FileReader(fileName));
 
     pda = reader.getReadedPDA();
+    pda.isPrintable = true;
 
     String tape1 = "a a b b";
     tapeReader = new TapeReader(tape1);
@@ -164,12 +169,34 @@ public class PushdownAutomatonTest {
     reader = new PDAReader(new FileReader(fileName));
 
     pda = reader.getReadedPDA();
+    pda.isPrintable = true;
 
     String tape1 = "1 1 1 1";
     tapeReader = new TapeReader(tape1);
     tape = new Tape(tapeReader.getTokenizedInput(), pda.getInputAlphabet());
 
     assertTrue(pda.evaluate(tape));
+    System.out.println();
+
+    String tape2 = "1 0 1 1";
+    tapeReader = new TapeReader(tape2);
+    tape = new Tape(tapeReader.getTokenizedInput(), pda.getInputAlphabet());
+
+    assertFalse(pda.evaluate(tape));
+    System.out.println();
+
+    String tape3 = "0 1 1 0";
+    tapeReader = new TapeReader(tape3);
+    tape = new Tape(tapeReader.getTokenizedInput(), pda.getInputAlphabet());
+
+    assertTrue(pda.evaluate(tape));
+    System.out.println();
+
+    String tape4 = "0 1 0";
+    tapeReader = new TapeReader(tape4);
+    tape = new Tape(tapeReader.getTokenizedInput(), pda.getInputAlphabet());
+
+    assertFalse(pda.evaluate(tape));
     System.out.println();
   }
 }

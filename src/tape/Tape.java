@@ -66,6 +66,10 @@ public class Tape {
     return currentPosition == 0;
   }
 
+  public int size() {
+    return getSymbols().size();
+  }
+
   public Alphabet getAlphabet() {
     return alphabet;
   }
@@ -107,6 +111,7 @@ public class Tape {
     for (int i = getCurrentPosition(); i < getSymbols().size(); i++) {
       tape += getSymbols().get(i) + " ";
     }
+    tape += "$";
     return tape;
   }
 }
