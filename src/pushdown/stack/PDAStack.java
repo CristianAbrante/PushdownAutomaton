@@ -8,6 +8,11 @@ import java.util.Stack;
 /**
  * <h2>PDAStack</h2>
  *
+ * Stack class used that
+ * inherits the most used
+ * methods by the automaton.
+ *
+ *
  * @author Cristian Abrante
  * @version 1.0.0
  */

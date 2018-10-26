@@ -19,6 +19,12 @@ import java.util.TreeSet;
 /**
  * <h2>PushdownAutomaton</h2>
  *
+ * Simulator of a pushdown
+ * automaton.
+ *
+ * It contains the main elements
+ * of this formal computing system.
+ *
  * @author Cristian Abrante
  * @version 1.0.0
  */
@@ -133,7 +139,7 @@ public class PushdownAutomaton {
                     currentEvaluationStack.peek());
     if (isPrintable) {
       printHeader();
-      printCurrentState(nextTransitions);
+      printCurrentState(null, nextTransitions);
     }
     if (nextTransitions != null) {
       evaluationStack.push(currentEvaluationState,
@@ -142,7 +148,7 @@ public class PushdownAutomaton {
       for (PDATransition t : nextTransitions) {
         if (evaluateTransition(t)) {
           if (isPrintable)
-            printCurrentState(null);
+            printCurrentState(t, null);
           return true;
         } else {
           restoreActualState();
@@ -178,7 +184,7 @@ public class PushdownAutomaton {
       return true;
     if (currentEvaluationStack.isEmpty()) {
       if (isPrintable)
-        printCurrentState(null);
+        printCurrentState(t,null);
       return false;
     }
 
@@ -187,7 +193,7 @@ public class PushdownAutomaton {
                                             currentEvaluationTape.read(),
                                             currentEvaluationStack.peek());
     if (isPrintable)
-      printCurrentState(nextTransitions);
+      printCurrentState(t, nextTransitions);
     if (nextTransitions != null) {
       evaluationStack.push(currentEvaluationState,
                            currentEvaluationTape,
@@ -221,20 +227,20 @@ public class PushdownAutomaton {
   }
 
   private String getFormat() {
-    return "| %-5s | %-" + (tapeSize * 2 + 1) + "s | %-15s | ";
+    return "| %-25s | %-5s | %-" + (tapeSize * 2 + 1) + "s | %-15s | ";
   }
 
-  private void printCurrentState(TreeSet<PDATransition> transitions) {
+  private void printCurrentState(Transition t,TreeSet<PDATransition> transitions) {
     String printFormat = getFormat();
-    String currentState = String.format(printFormat, currentEvaluationState,
+    String currentState = String.format(printFormat,
+            t == null ? "-" : t.toString(),
+            currentEvaluationState,
             currentEvaluationTape.toString(),
             currentEvaluationStack.toString());
-
     if (transitions != null) {
       int index = 0;
-      for (PDATransition t : transitions) {
-        currentState += t + "  ";
-        //currentState += index < transitions.size() - 1 ? " "
+      for (PDATransition transition : transitions) {
+        currentState += transition + "  ";
       }
     } else {
       currentState += evaluateIfCurrentStateIsAcceptance() ?
@@ -246,10 +252,10 @@ public class PushdownAutomaton {
 
   private void printHeader() {
     String format = getFormat();
-    int n = 44 + tapeSize * 2;
+    int n = 69 + tapeSize * 2;
 
     String header = String.join("", Collections.nCopies(n, "-")) + "\n";
-    header += String.format(getFormat(), "state", "word (ω)", "stack");
+    header += String.format(getFormat(), "used transition", "state", "word (ω)", "stack");
     header += "transitions\n";
     header += String.join("", Collections.nCopies(n, "-"));
     System.out.println(header);
