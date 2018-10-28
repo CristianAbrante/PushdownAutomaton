@@ -108,6 +108,8 @@ public abstract class ComputationalSet<E>
    * @param e element to be added.
    * @return {@code true} if set didn't
    *          contained specified element.
+   * @throws NullPointerException if
+   *          element to be added is {@code null}.
    */
   @Override
   public boolean add(E e) {
@@ -157,6 +159,10 @@ public abstract class ComputationalSet<E>
    * @return {@code true} if this set
    *          changed as a result of
    *          the call.
+   * @throws NullPointerException if
+   *          collection or any element
+   *          inside the collection is
+   *          {@code null}.
    */
   @Override
   public boolean addAll(Collection<? extends E> c) {
@@ -217,6 +223,57 @@ public abstract class ComputationalSet<E>
   @Override
   public int size() {
     return getInternalSet().size();
+  }
+
+  /**
+   * Test if two computational sets
+   * are equal.
+   *
+   * @param o the other set to compare.
+   * @return {@code true} if two sets are
+   *          equals.
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ComputationalSet)) return false;
+    if (!super.equals(o)) return false;
+    ComputationalSet<?> that = (ComputationalSet<?>) o;
+    return Objects.equals(internalSet, that.internalSet);
+  }
+
+  /**
+   * Return the hash code of the
+   * object.
+   *
+   * @return the hash code.
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), internalSet);
+  }
+
+  /**
+   * Method that returns the
+   * equal element on the set
+   * if present.
+   *
+   * @param e element to be checked.
+   * @return the element if it is present
+   *          and {@code null} otherwise.
+   * @throws NullPointerException if element
+   *          is {@code null}.
+   */
+  public E get(E e) {
+    if (e == null)
+      throw new NullPointerException("element can not be null.");
+
+    for (E elem : this) {
+      if (elem.equals(e)) {
+        return elem;
+      }
+    }
+    return null;
   }
 
   /**

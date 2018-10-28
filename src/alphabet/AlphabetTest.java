@@ -158,6 +158,6 @@ public class AlphabetTest {
     assertEquals("{x}", sigma.toString());
     
     sigma = new Alphabet(Symbol.EMPTY_SYMBOL);
-    assertEquals("{.}", sigma.toString());
+    assertEquals("{ε}", sigma.toString());
   }
 }
