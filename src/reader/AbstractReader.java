@@ -102,6 +102,7 @@ public abstract class AbstractReader {
         splittedDefinition.add(cleanedLine);
       }
     }
+    currentDefinitionIndex = 0;
   }
 
   /**
