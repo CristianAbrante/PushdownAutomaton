@@ -23,6 +23,14 @@ public class State implements Comparable<State> {
    */
   private String identifier;
 
+  /**
+   * Constructor of the class.
+   *
+   * It creates a copy of the
+   * state as parameter.
+   *
+   * @param that state to be copied.
+   */
   public State(State that) {
     this(that.toString());
   }

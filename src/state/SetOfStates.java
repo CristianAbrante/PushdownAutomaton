@@ -1,6 +1,8 @@
 package state;
 
-import java.util.*;
+import ComputationalSet.ComputationalSet;
+
+import java.util.Collection;
 
 /**
  * <h2>SetOfStates</h2>
@@ -16,7 +18,8 @@ import java.util.*;
  * @author Cristian Abrante
  * @version 1.0.0
  */
-public class SetOfStates extends TreeSet<State> {
+public class SetOfStates
+        extends ComputationalSet<State> {
 
   /**
    * Constructor of the
@@ -40,8 +43,7 @@ public class SetOfStates extends TreeSet<State> {
    *              the set from.
    */
   public SetOfStates(State state) {
-    this();
-    add(state);
+    super(state);
   }
 
   /**
@@ -58,24 +60,7 @@ public class SetOfStates extends TreeSet<State> {
    *
    */
   public SetOfStates(Collection<State> states) {
-    this();
-    addAll(states);
-  }
-
-  /**
-   * Returns the given state represented
-   * by the identifier.
-   *
-   * @param identifier
-   * @return
-   */
-  public State getStateById(String identifier) {
-    for (State state : this) {
-      if (state.toString().equals(identifier)) {
-        return state;
-      }
-    }
-    return null;
+    super(states);
   }
 
   /**
@@ -99,7 +84,8 @@ public class SetOfStates extends TreeSet<State> {
    * @return {@code true} if the set contains
    *         all the states.
    */
-  public boolean containsAllById(Collection<String> identifiers) {
+  public boolean containsAllById(
+          Collection<String> identifiers) {
     if (identifiers == null)
       throw new NullPointerException("states can not be null.");
 
@@ -111,15 +97,14 @@ public class SetOfStates extends TreeSet<State> {
     return true;
   }
 
-  @Override
-  public String toString() {
-    String setOfStates = "{";
-    int index = 0;
-    for (State state : this) {
-      setOfStates += index < size() - 1 ? state + ", " : state;
-      index += 1;
-    }
-    setOfStates += "}";
-    return setOfStates;
+  /**
+   * Returns the given state represented
+   * by the identifier.
+   *
+   * @param identifier
+   * @return
+   */
+  public State getById(String identifier) {
+    return super.get(new State(identifier));
   }
 }
