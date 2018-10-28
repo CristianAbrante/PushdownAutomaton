@@ -20,11 +20,32 @@ import java.util.List;
 /**
  * <h2>PDAReader</h2>
  *
+ * This class is used to read
+ * a pushdown automaton from
+ * a file with a specific format.
+ *
+ * The format of the PDA files is
+ * like this:
+ *
+ * q0 q1 ... qi # list of states.
+ * a1 a2 ... aj # list symbols of the input alphabet.
+ * A1 A2 ... Ak # list symbols of the stack alphabet.
+ * q0           # initial state.
+ * A0           # initial stack symbol.
+ * f0 f1 ... fr # list of accepting states.
+ *
+ * q a A q' A'1 A'2 ... # transition 1 (q, a, A) -> (q', {A'1, A'2, ...})
+ *
  * @author Cristian Abrante
  * @version 1.0.0
  */
 public class PDAReader extends AbstractReader {
 
+  /**
+   * Some variables used to store
+   * the elements of the pushdown
+   * automaton.
+   */
   private SetOfStates setOfStates;
   private Alphabet inputAlphabet;
   private Alphabet stackAlphabet;
@@ -33,6 +54,9 @@ public class PDAReader extends AbstractReader {
   private SetOfStates acceptingStates;
   private PDATransitionFunction transitionFunction;
 
+  /**
+   * Readed automaton.
+   */
   private PushdownAutomaton PDA;
 
   public PDAReader(FileReader file) {
@@ -43,7 +67,7 @@ public class PDAReader extends AbstractReader {
     super(definition);
   }
 
-  public PushdownAutomaton getReadedPDA() {
+  public PushdownAutomaton getReadPDA() {
     return PDA;
   }
 
@@ -120,25 +144,25 @@ public class PDAReader extends AbstractReader {
     if (tokenizedString.size() < 5)
       throw new IllegalArgumentException("transition must have at least 5 elements");
 
-    State initialState = setOfStates.getStateById(tokenizedString.get(0));
+    State initialState = setOfStates.getById(tokenizedString.get(0));
     if (initialState == null)
       throw new IllegalArgumentException("invalid initial state on transition: " + transitionString);
 
-    Symbol inputSymbol = inputAlphabet.getSymbol(tokenizedString.get(1));
+    Symbol inputSymbol = inputAlphabet.getByValue(tokenizedString.get(1));
     if (inputSymbol == null)
       throw new IllegalArgumentException("invalid input symbol on transition: " + transitionString);
 
-    Symbol stackSymbol = stackAlphabet.getSymbol(tokenizedString.get(2));
+    Symbol stackSymbol = stackAlphabet.getByValue(tokenizedString.get(2));
     if (stackSymbol == null)
       throw new IllegalArgumentException("invalid stack symbol on transition: " + transitionString);
 
-    State nextState = setOfStates.getStateById(tokenizedString.get(3));
+    State nextState = setOfStates.getById(tokenizedString.get(3));
     if (nextState == null)
       throw new IllegalArgumentException("invalid next state on transition: " + transitionString);
 
     SymbolList nextSymbolStack = new SymbolList();
     for (int i = 4; i < tokenizedString.size(); ++i) {
-      nextSymbolStack.add(stackAlphabet.getSymbol(tokenizedString.get(i)));
+      nextSymbolStack.add(stackAlphabet.getByValue(tokenizedString.get(i)));
     }
 
     Triplet<State, Symbol, Symbol> initialStateTriplet = new Triplet<>(initialState, inputSymbol, stackSymbol);
@@ -151,7 +175,7 @@ public class PDAReader extends AbstractReader {
     if (tokenizedString.size() != 1)
       throw new IllegalArgumentException("expected only one initial state.");
 
-    return setOfStates.getStateById(tokenizedString.get(0));
+    return setOfStates.getById(tokenizedString.get(0));
   }
 
   private Symbol getInitialStackSymbol(String currentLine) {
@@ -159,14 +183,14 @@ public class PDAReader extends AbstractReader {
     if (tokenizedString.size() != 1)
       throw new IllegalArgumentException("expected only one initial stack symbol.");
 
-    return stackAlphabet.getSymbol(tokenizedString.get(0));
+    return stackAlphabet.getByValue(tokenizedString.get(0));
   }
 
   private List<State> getAcceptingStates(String currentLine) {
     List<String> tokenizedString = tokenizeString(currentLine);
     List<State> states = new ArrayList<>();
     for (String token : tokenizedString) {
-      State acceptingState = setOfStates.getStateById(token);
+      State acceptingState = setOfStates.getById(token);
       if (acceptingState != null) {
         states.add(acceptingState);
       } else {

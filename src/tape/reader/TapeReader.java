@@ -35,6 +35,9 @@ public class TapeReader
   public void setDefinition(String definition) {
     super.setDefinition(definition);
     readTapes = new ArrayList<>();
+    if (definition.isEmpty()) {
+      readTapes.add(new Tape());
+    }
     while (hasMoreLines()) {
       String tapeDefinition = getNextLine();
       List<Symbol> symbols = super.readSymbols(tapeDefinition);

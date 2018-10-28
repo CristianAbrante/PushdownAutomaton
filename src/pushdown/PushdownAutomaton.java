@@ -123,7 +123,7 @@ public class PushdownAutomaton {
     if (inputTape == null)
       throw new NullPointerException("can not evaluate a null input tape.");
 
-    if (!inputTape.isReseted())
+    if (!inputTape.isReset())
       throw new IllegalArgumentException("tape must be reset");
     tapeSize = inputTape.size();
     currentEvaluationState = initialState;

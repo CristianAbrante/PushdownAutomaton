@@ -193,6 +193,26 @@ public class Tape {
   }
 
   /**
+   * Check if tape head is reseted.
+   *
+   * @return {@code true} if head is zero.
+   */
+  public boolean isReset() {
+    return getHeadOffset() == 0;
+  }
+
+  /**
+   * Checks if head is beyond the
+   * size of the input symbols.
+   *
+   * @return {@code true} if head is
+   *          far than size.
+   */
+  public boolean hasReachedTheEnd() {
+    return getHeadOffset() >= size();
+  }
+
+  /**
    * Returns the offset of
    * the head from the beginning.
    *
@@ -219,7 +239,7 @@ public class Tape {
    * @param symbols of the tape.
    */
   public void setSymbols(Collection<Symbol> symbols) {
-    symbols = new ArrayList<>();
+    this.symbols = new ArrayList<>();
     getSymbols().addAll(symbols);
     head = 0;
   }

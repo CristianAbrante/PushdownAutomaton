@@ -8,6 +8,7 @@ import transition.Transition;
 import transition.TransitionFunction;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -82,32 +83,17 @@ public class PDATransitionFunction extends TransitionFunction {
                                           Symbol stackSymbol) {
     Triplet<State, Symbol, Symbol> currentStateTriplet =
             new Triplet<>(currentState, tapeSymbol, stackSymbol);
-
-    TreeSet<Transition> symbolTransitions =
+    Set<Transition> symbolTransitions =
             super.getNextState(currentStateTriplet);
 
     // sets the tuple to collect empty symbol values.
     currentStateTriplet = currentStateTriplet.setAt1(Symbol.EMPTY_SYMBOL);
-    TreeSet<Transition> emptySymbolTransitions =
+    Set<Transition> emptySymbolTransitions =
             super.getNextState(currentStateTriplet);
 
-    TreeSet<Transition> unionTransitions;
-    if (symbolTransitions == null) {
-      unionTransitions = emptySymbolTransitions;
-    } else {
-      if (emptySymbolTransitions == null) {
-        unionTransitions = symbolTransitions;
-      } else {
-        symbolTransitions.addAll(emptySymbolTransitions);
-        unionTransitions = symbolTransitions;
-      }
-    }
-    if (unionTransitions == null) {
-      return null;
-    }
-
+    symbolTransitions.addAll(emptySymbolTransitions);
     TreeSet<PDATransition> pdaTransitions = new TreeSet<>();
-    for (Transition t : unionTransitions) {
+    for (Transition t : symbolTransitions) {
       pdaTransitions.add(new PDATransition(t));
     }
     return pdaTransitions;

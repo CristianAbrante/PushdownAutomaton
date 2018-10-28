@@ -67,7 +67,7 @@ public class TransitionFunction
    * state.
    */
   public boolean hasNextState(Tuple currentState) {
-    return getNextState(currentState) != null;
+    return !getNextState(currentState).isEmpty();
   }
 
   /**
@@ -88,7 +88,7 @@ public class TransitionFunction
         transitions.add(t);
       }
     }
-    return transitions.isEmpty() ? null : transitions;
+    return transitions;
   }
 
   /**
