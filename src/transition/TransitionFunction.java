@@ -1,8 +1,12 @@
 package transition;
 
+import ComputationalSet.ComputationalSet;
 import org.javatuples.Tuple;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
+
 
 /**
  * <h2>Transition Function</h2>
@@ -17,18 +21,14 @@ import java.util.*;
  * @author Cristian Abrante
  * @version 1.0.0
  */
-public class TransitionFunction {
-  /**
-   * Map is used to store the transitions
-   * in a efficient way.
-   */
-  private HashMap<Tuple, TreeSet<Tuple>> functionMap;
+public class TransitionFunction
+        extends ComputationalSet<Transition> {
 
   /**
    * Empty constructor of the class.
    */
   public TransitionFunction() {
-    functionMap = new HashMap<Tuple, TreeSet<Tuple>>();
+    super();
   }
 
   /**
@@ -40,8 +40,7 @@ public class TransitionFunction {
    *                   to store.
    */
   public TransitionFunction(Transition transition) {
-    this();
-    addTransition(transition);
+    super(transition);
   }
 
   /**
@@ -51,44 +50,11 @@ public class TransitionFunction {
    * transitions, that the function is
    * going to store.
    *
-   * @param transitions
+   * @param transitions collection of transitions
+   *                    to add.
    */
   public TransitionFunction(Collection<Transition> transitions) {
-    this();
-    addTransitions(transitions);
-  }
-
-  /**
-   * Adds the specified transition
-   * to the transition function.
-   *
-   * @param transition that we want to add.
-   * @throws NullPointerException if transition is {@code null}
-   */
-  public void addTransition(Transition transition) {
-    if (transition == null)
-      throw new NullPointerException("transition can be null.");
-
-    Tuple currentState = transition.getCurrentState();
-    TreeSet<Tuple> nextState = hasNextState(currentState) ?
-      getNextStateTuples(currentState) :
-      new TreeSet<Tuple>();
-    nextState.add(transition.getNextState());
-    getFunctionMap().put(currentState, nextState);
-  }
-
-  /**
-   * Add a collection of transitions to
-   * the transition function.
-   *
-   * @param transitions that we want to add.
-   */
-  public void addTransitions(Collection<Transition> transitions) {
-    if (transitions == null)
-      throw new NullPointerException("transitions can not be null.");
-
-    for (Transition transition : transitions)
-      addTransition(transition);
+    super(transitions);
   }
 
   /**
@@ -112,37 +78,17 @@ public class TransitionFunction {
    * @return next state of the function or {@code null}
    * if there is not next state.
    */
-  public TreeSet<Transition> getNextState(Tuple currentState) {
+  public Set<Transition> getNextState(Tuple currentState) {
     if (currentState == null)
       throw new NullPointerException("current state can not be null.");
 
-    TreeSet<Tuple> nextStates = getFunctionMap().get(currentState);
-    if (nextStates == null)
-      return null;
-
-    TreeSet<Transition> nextStateTransitions = new TreeSet<>();
-    for (Tuple nextState : nextStates)
-      nextStateTransitions.add(new Transition(currentState, nextState));
-
-    return nextStateTransitions;
-  }
-
-  /**
-   * Returns the list of transitions
-   * of the functions.
-   *
-   * @return list of transitions of the
-   * function.
-   */
-  public List<Transition> getTransitions() {
-    List<Transition> transitions = new ArrayList<Transition>();
-    for (Map.Entry<Tuple, TreeSet<Tuple>> transition :
-      getFunctionMap().entrySet()) {
-      for (Tuple nextState : transition.getValue()) {
-        transitions.add(new Transition(transition.getKey(), nextState));
+    Set<Transition> transitions = new TreeSet<>();
+    for (Transition t : this) {
+      if (t.getCurrentState().equals(currentState)) {
+        transitions.add(t);
       }
     }
-    return transitions;
+    return transitions.isEmpty() ? null : transitions;
   }
 
   /**
@@ -151,8 +97,8 @@ public class TransitionFunction {
    *
    * @return number of transitions.
    */
-  public int getNumberOfTransitions() {
-    return getTransitions().size();
+  public int numberOfTransitions() {
+    return super.size();
   }
 
   /**
@@ -165,25 +111,9 @@ public class TransitionFunction {
   @Override
   public String toString() {
     String transitionFunction = "";
-    for (Transition transition : getTransitions()) {
-      transitionFunction += transition.toString() + "\n";
+    for (Transition t: this) {
+      transitionFunction += t.toString() + "\n";
     }
     return transitionFunction;
-  }
-
-  /**
-   * Private getter of the function map
-   *
-   * @return teh function map.
-   */
-  private HashMap<Tuple, TreeSet<Tuple>> getFunctionMap() {
-    return functionMap;
-  }
-
-  private TreeSet<Tuple> getNextStateTuples(Tuple currentState) {
-    if (currentState == null)
-      throw new NullPointerException("current state can not be null.");
-
-    return getFunctionMap().get(currentState);
   }
 }

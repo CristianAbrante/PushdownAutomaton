@@ -156,6 +156,15 @@ public class Transition implements Comparable<Transition> {
     return transition;
   }
 
+  /**
+   * Compares two transitions.
+   *
+   * @param o the other transition to
+   *          compare with.
+   * @return 0 if transitions are equals
+   *         -1 is o is greater than this
+   *         and 1 otherwise.
+   */
   @Override
   public int compareTo(Transition o) {
     int currentStateComp = getCurrentState().compareTo(o.getCurrentState());

@@ -13,6 +13,7 @@ import symbol.Symbol;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class TransitionFunctionTest {
@@ -74,13 +75,13 @@ public class TransitionFunctionTest {
   public void addTransitionTest() {
     TransitionFunction test1function = new TransitionFunction(test1Transitions);
 
-    assertEquals(5, test1function.getNumberOfTransitions());
+    assertEquals(5, test1function.numberOfTransitions());
 
     Transition t1t4 = new Transition(
       new Triplet<>(q2, b, Symbol.EMPTY_SYMBOL),
       new Pair<>(q1, B));
-    test1function.addTransition(t1t4);
-    assertEquals(6, test1function.getNumberOfTransitions());
+    test1function.add(t1t4);
+    assertEquals(6, test1function.numberOfTransitions());
   }
 
   @Test
@@ -88,9 +89,9 @@ public class TransitionFunctionTest {
     TransitionFunction test1function = new TransitionFunction(test1Transitions);
     for (Transition transition : test1Transitions) {
       assertTrue(test1function.hasNextState(transition.getCurrentState()));
-      TreeSet<Tuple> next = test1function.getNextState(transition.getCurrentState());
-      for (Tuple nextState : next) {
-        assertEquals(transition.getNextState(), nextState);
+      Set<Transition> next = test1function.getNextState(transition.getCurrentState());
+      for (Transition t : next) {
+        assertEquals(t.getNextState(), transition.getNextState());
       }
     }
   }
@@ -99,27 +100,27 @@ public class TransitionFunctionTest {
   public void addSameTransitionMultipleTimesTest() {
     TransitionFunction test1function = new TransitionFunction(test1Transitions);
 
-    assertEquals(5, test1function.getNumberOfTransitions());
+    assertEquals(5, test1function.numberOfTransitions());
 
     int times = 6;
     for (int i = 0; i < times; i++)
-      test1function.addTransition(test1Transitions.get(0));
-    assertEquals(5, test1function.getNumberOfTransitions());
+      test1function.add(test1Transitions.get(0));
+    assertEquals(5, test1function.numberOfTransitions());
   }
 
   @Test
   public void addNonDeterministicTransitionsTest() {
     TransitionFunction test1function = new TransitionFunction(test1Transitions);
-    assertEquals(5, test1function.getNumberOfTransitions());
+    assertEquals(5, test1function.numberOfTransitions());
 
     Transition tr1 = new Transition(test1Transitions.get(0).getCurrentState(),
       new Pair<>(q1, S));
     Transition tr2 = new Transition(test1Transitions.get(0).getCurrentState(),
       new Pair<>(q1, A));
 
-    test1function.addTransition(tr1);
-    test1function.addTransition(tr2);
-    assertEquals(7, test1function.getNumberOfTransitions());
+    test1function.add(tr1);
+    test1function.add(tr2);
+    assertEquals(7, test1function.numberOfTransitions());
     assertEquals(3, test1function.getNextState(test1Transitions.get(0).getCurrentState()).size());
   }
 }
