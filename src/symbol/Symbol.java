@@ -1,6 +1,3 @@
-/**
- * Package used to contain the symbol modelling
- */
 package symbol;
 
 /**
